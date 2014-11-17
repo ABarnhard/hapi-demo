@@ -2,6 +2,7 @@ var port = process.env.PORT || null;
 
 var Hapi = require('hapi');
 var server = new Hapi.Server(port);
+var Joi = require('joi');
 
 server.route({
     config: {
@@ -21,6 +22,16 @@ server.route({
     path: '/{name}',
     handler: function (request, reply) {
         reply('Hello, ' + encodeURIComponent(request.params.name) + '!' + request.query.limit);
+    },
+    config: {
+        validate: {
+            params: {
+                name: Joi.string().min(3).max(7)
+            },
+            query: {
+                limit: Joi.number().required().min(9)
+            }
+        }
     }
 });
 
