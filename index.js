@@ -1,4 +1,5 @@
 var port = process.env.PORT || null;
+var db = process.env.DB;
 
 var Hapi = require('hapi');
 var server = new Hapi.Server(port);
@@ -45,13 +46,19 @@ server.route({
     }
 });
 
+var mongoose = require('mongoose');
+mongoose.connect(db);
+
+var Dog = mongoose.model('Dog', {name: String, age: Number});
+
 server.route({
     method: 'POST',
     path: '/dogs',
     handler: function(request, response){
-        var body = request.payload;
-        console.log(body);
-        response(body);
+        var puppy = new Dog(request.payload);
+        puppy.save(function(){
+            response(puppy);
+        });
     }
 });
 
