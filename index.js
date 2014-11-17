@@ -45,6 +45,16 @@ server.route({
     }
 });
 
+server.route({
+    method: 'POST',
+    path: '/dogs',
+    handler: function(request, response){
+        var body = request.payload;
+        console.log(body);
+        response(body);
+    }
+});
+
 server.pack.register([{
     plugin: require('good'),
     options: {
